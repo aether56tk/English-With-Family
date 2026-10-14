@@ -24,19 +24,27 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+      - name: Prepare bundled web assets
+        run: |
+          mkdir -p android/app/src/main/assets/www
+          cp -R english-with-family/. android/app/src/main/assets/www/
+          rm -f android/app/src/main/assets/www/sw.js
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: javascript, java-kotlin
-      - name: Build Android project
-        run: |
-          if [ -f android/gradlew ]; then
-            chmod +x android/gradlew
-            cd android && ./gradlew --no-daemon :app:assembleDebug
-          else
-            echo "Gradle wrapper not present; CodeQL will use autobuild."
-          fi
-      - name: Autobuild if needed
-        uses: github/codeql-action/autobuild@v3
+      - name: Build Android project for analysis
+        run: gradle --no-daemon -p android :app:assembleDebug
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
