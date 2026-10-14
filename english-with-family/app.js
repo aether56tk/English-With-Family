@@ -105,8 +105,7 @@ const lessons = [
 {id:97,title:"Explaining a problem",items:[324,325,326]},
 {id:98,title:"Making a complaint politely",items:[327,328,329]},
 {id:99,title:"Inviting someone",items:[330,331,332]},
-{id:100,title:"Ending a conversation",items:[333,334,335]},
-{id:101,title:"Tell a short story",items:[336,337,338]}
+{id:100,title:"Ending a conversation",items:[333,334,335]}
 ];
 
 // Additional everyday course: 80 lessons, 240 phrases.
