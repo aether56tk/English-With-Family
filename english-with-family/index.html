@@ -49,11 +49,12 @@
         <button class="home-action" data-goto="progressPage"><span>⭐</span><strong>My progress</strong><small>See the little steps you've taken</small></button>
       </div>
     </section>
-    <section class="panel">
-      <h2>Today's suggestion</h2>
-      <div id="todayLesson"></div>
-      <button id="lessonBtn" class="primary full">Open today's lesson</button>
+    <section class="panel daily-plan">
+      <p class="eyebrow">A SMALL DAILY ROUTINE · ദിവസവും 5 മിനിറ്റ്</p><h2>My five-minute plan 🌿</h2>
+      <p lang="ml">ഇന്ന് അഞ്ച് മിനിറ്റ് മാത്രം പരിശീലിച്ചാലും മതി.</p><div id="dailyPlan"></div>
+      <button id="dailyPlanBtn" class="primary full">Start my 5-minute plan</button>
     </section>
+    <section class="panel"><h2>Today's suggestion</h2><div id="todayLesson"></div><button id="lessonBtn" class="primary full">Open today's lesson</button></section>
   </section>
 
   <section class="page" id="levelPage" aria-labelledby="levelHeading">
@@ -86,6 +87,7 @@
       <p lang="ml">ദൈനംദിന ജീവിതത്തിൽ ഉപയോഗിക്കുന്ന ഇംഗ്ലീഷ് പരിശീലിക്കാം.</p>
       <div class="practice-menu">
         <button id="conversationBtn" class="practice-choice">💬<span><strong>Everyday conversations</strong><small>At home, shops and the clinic</small></span></button>
+        <button id="pronunciationBtn" class="practice-choice">🎙️<span><strong>Speak and compare</strong><small>Practise saying a phrase aloud</small></span></button>
         <button id="revisionBtn" class="practice-choice">🔁<span><strong>Revise phrases</strong><small>Practise sentences again</small></span></button>
         <button id="quizBtn" class="practice-choice">🧩<span><strong>Quick quiz</strong><small>Check what you remember</small></span></button>
         <button id="voiceSettingsBtn" class="practice-choice">🔊<span><strong>Voice settings</strong><small>Test audio and choose speed</small></span></button>
@@ -111,8 +113,8 @@
       <h2>Your weekly practice</h2>
       <div class="course-progress"><div id="weeklyBar"></div></div>
       <p id="weeklySummary" class="muted small"></p>
-      <h2>Course checklist</h2>
-      <div id="progressList"></div>
+      <h2>What to practise next</h2><div id="progressInsights" class="lesson-card"></div>
+      <h2>Course checklist</h2><div id="progressList"></div>
       <button id="resetProgress" class="danger full">Reset this learner's progress</button>
       <p class="muted small">Your progress stays on this device and in this browser. It does not automatically sync between phones.</p>
     </section>
