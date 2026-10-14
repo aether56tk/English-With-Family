@@ -35,3 +35,17 @@ From the `english-with-family` directory, run `python -m http.server 8000`, then
 - Text-to-speech voice selection depends on device/browser availability.
 - Any speaking feedback should be treated as practice support, not a reliable pronunciation score.
 - The app shell may work offline after caching, but speech features can depend on the browser and device.
+
+
+## Android APK
+
+An Android WebView wrapper is included in the repository under `android/`. It packages the web app as local assets so the lessons can open without a browser address bar.
+
+To build a test APK:
+1. Open the repository on GitHub and select **Actions**.
+2. Select **Build Android APK**.
+3. Click **Run workflow** and confirm.
+4. When the run succeeds, open the run summary and download **English-With-Family-debug-apk** from the Artifacts section.
+5. Extract the downloaded ZIP and install `app-debug.apk` on your Android phone. You may need to allow installs from your browser or file manager.
+
+The workflow creates a debug APK for testing, not a Play Store release. The APK has not been built or device-tested in this commit yet. Some browser-dependent features, especially speech recognition, may behave differently inside Android WebView.
