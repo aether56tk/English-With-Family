@@ -3,6 +3,12 @@ name: Build and publish Android APK
 on:
   workflow_dispatch:
   push:
+    branches:
+      - main
+    paths:
+      - "android/**"
+      - "english-with-family/**"
+      - ".github/workflows/build-android-apk.yml"
     tags:
       - "v1.*"
 
