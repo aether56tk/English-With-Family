@@ -75,9 +75,7 @@ const lessons = [
 {id:67,title:"Safety and caution",items:[228,229,230]},
 {id:68,title:"Plans and invitations",items:[231,232,233]},
 {id:69,title:"Past events",items:[234,235,236]},
-{id:70,title:"Future plans",items:[237,238,239]},
-{id:71,title:"Simple opinions",items:[240,241,242]},
-{id:72,title:"Longer everyday conversations",items:[243,244,245]}
+{id:70,title:"Future plans",items:[237,238,239]}
 ];
 
 // Additional everyday course: 50 lessons, 150 phrases.
