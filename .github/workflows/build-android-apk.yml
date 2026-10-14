@@ -1,15 +1,17 @@
-name: Build Android APK
+name: Build and publish Android APK
 
 on:
   workflow_dispatch:
   push:
+    tags:
+      - "v1.*"
     paths:
       - "android/**"
       - "english-with-family/**"
       - ".github/workflows/build-android-apk.yml"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -41,10 +43,28 @@ jobs:
       - name: Build debug APK
         run: gradle --no-daemon -p android :app:assembleDebug
 
-      - name: Upload APK
+      - name: Rename APK for release
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk English-With-Family-${GITHUB_REF_NAME}-debug.apk
+
+      - name: Upload APK build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: English-With-Family-debug-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: English-With-Family-${{ github.ref_name }}-debug-apk
+          path: English-With-Family-${{ github.ref_name }}-debug.apk
           if-no-files-found: error
           retention-days: 30
+
+      - name: Publish GitHub release with APK
+        if: startsWith(github.ref, 'refs/tags/v1.')
+        uses: softprops/action-gh-release@v2
+        with:
+          name: English With Family ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          generate_release_notes: true
+          files: English-With-Family-${{ github.ref_name }}-debug.apk
+          body: |
+            English With Family Android APK release.
+
+            - Includes the English With Family web lessons packaged in an Android app.
+            - This is a debug-signed APK for testing, not a Play Store production release.
+            - Speech recognition availability depends on the Android device and WebView.
