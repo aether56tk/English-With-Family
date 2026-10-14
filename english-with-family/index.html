@@ -16,69 +16,108 @@
   <div class="header-row">
     <label class="profile-label" for="profileSelect">Learner / പഠിതാവ്</label>
     <select id="profileSelect" aria-label="Choose learner"></select>
-    <button id="addProfileBtn" class="small-btn light">+ Add</button>
+    <button id="addProfileBtn" class="small-btn light">+ Add learner</button>
   </div>
 </header>
-
+<nav class="page-nav" aria-label="Main navigation">
+  <button class="nav-item active" data-page="homePage">🏠<span>Home</span></button>
+  <button class="nav-item" data-page="levelPage">🌱<span>My level</span></button>
+  <button class="nav-item" data-page="lessonPage">📘<span>Lessons</span></button>
+  <button class="nav-item" data-page="practicePage">💬<span>Practice</span></button>
+  <button class="nav-item" data-page="progressPage">⭐<span>Progress</span></button>
+</nav>
 <main>
-  <section class="panel welcome">
-    <p class="eyebrow">YOUR DAILY PRACTICE · ദിവസവും പരിശീലിക്കാം</p>
-    <h1 id="welcomeTitle">നമസ്കാരം! 👋</h1>
-    <p lang="ml">ഇന്ന് നമുക്ക് കുറച്ച് ഇംഗ്ലീഷ് പഠിക്കാം.</p>
-    <p class="muted">Short lessons. Gentle practice. No subscription.</p>
-    <div class="welcome-row">
-      <div><strong id="streakNumber">0</strong><span>day streak</span></div>
-      <div><strong id="completedNumber">0/30</strong><span>days completed</span></div>
-    </div>
-    <button id="continueBtn" class="primary full">Start learning</button>
+  <section class="page active" id="homePage" aria-labelledby="welcomeTitle">
+    <section class="panel welcome">
+      <p class="eyebrow">YOUR DAILY PRACTICE · ദിവസവും പരിശീലിക്കാം</p>
+      <h1 id="welcomeTitle">നമസ്കാരം! 👋</h1>
+      <p lang="ml">ഇന്ന് നമുക്ക് കുറച്ച് ഇംഗ്ലീഷ് പഠിക്കാം.</p>
+      <p class="muted">Short lessons. Gentle practice. No subscription.</p>
+      <div class="welcome-row">
+        <div><strong id="streakNumber">0</strong><span>day streak</span></div>
+        <div><strong id="completedNumber">0/8</strong><span>lessons completed</span></div>
+      </div>
+      <button id="continueBtn" class="primary full">Start learning</button>
+    </section>
+    <section class="panel">
+      <h2>What would you like to do?</h2>
+      <p class="muted">Choose one simple step. You can come back here anytime.</p>
+      <div class="home-actions">
+        <button class="home-action" data-goto="levelPage"><span>🌱</span><strong>Find my level</strong><small>Try a friendly beginner check</small></button>
+        <button class="home-action" data-goto="lessonPage"><span>📘</span><strong>Learn English</strong><small>Listen and practise useful phrases</small></button>
+        <button class="home-action" data-goto="practicePage"><span>💬</span><strong>Real conversations</strong><small>Practise things you say every day</small></button>
+        <button class="home-action" data-goto="progressPage"><span>⭐</span><strong>My progress</strong><small>See the little steps you've taken</small></button>
+      </div>
+    </section>
+    <section class="panel">
+      <h2>Today's suggestion</h2>
+      <div id="todayLesson"></div>
+      <button id="lessonBtn" class="primary full">Open today's lesson</button>
+    </section>
   </section>
 
-  <section class="panel">
-    <h2>Start with your level</h2>
-    <p class="muted">A few friendly questions help us suggest a starting point.</p>
-    <button id="levelCheckBtn" class="secondary full">Take the level check</button>
-    <div id="levelCheckArea"></div>
+  <section class="page" id="levelPage" aria-labelledby="levelHeading">
+    <section class="panel">
+      <p class="eyebrow">STEP 1 · START WHERE YOU ARE</p>
+      <h1 id="levelHeading">Find my level 🌱</h1>
+      <p lang="ml">തുടങ്ങാൻ നിങ്ങൾക്ക് എത്രത്തോളം ഇംഗ്ലീഷ് അറിയാമെന്ന് നോക്കാം.</p>
+      <p class="muted">Answer a few friendly questions. This is practice, not an exam. You can skip it and start learning anytime.</p>
+      <button id="levelCheckBtn" class="primary full">Start level check</button>
+      <div id="levelCheckArea"></div>
+    </section>
   </section>
 
-  <section class="panel">
-    <h2>Today’s lesson</h2>
-    <div id="todayLesson"></div>
-    <button id="lessonBtn" class="primary full">Open today's lesson</button>
+  <section class="page" id="lessonPage" aria-labelledby="lessonHeading">
+    <section class="panel">
+      <p class="eyebrow">STEP 2 · LISTEN, READ, SAY</p>
+      <h1 id="lessonHeading">English lessons 📘</h1>
+      <p lang="ml">കേൾക്കൂ, അർത്ഥം മനസ്സിലാക്കൂ, പിന്നെ പറയാൻ ശ്രമിക്കൂ.</p>
+      <p class="muted">Choose a lesson. Listen to each sentence and read the Malayalam meaning.</p>
+      <div id="lessonMenu" class="lesson-menu"></div>
+      <div id="lessonContent"></div>
+      <div id="activityArea"></div>
+    </section>
   </section>
 
-  <section class="panel">
-    <h2>Practice</h2>
-    <div class="action-grid">
-      <button id="conversationBtn" class="tile">💬<span>Conversation practice</span></button>
-      <button id="revisionBtn" class="tile">🔁<span>Revision</span></button>
-      <button id="quizBtn" class="tile">🧩<span>Quick quiz</span></button>
-      <button id="voiceSettingsBtn" class="tile">🔊<span>Voice settings</span></button>
-    </div>
-    <div id="activityArea"></div>
+  <section class="page" id="practicePage" aria-labelledby="practiceHeading">
+    <section class="panel">
+      <p class="eyebrow">STEP 3 · USE ENGLISH IN REAL LIFE</p>
+      <h1 id="practiceHeading">Practice together 💬</h1>
+      <p lang="ml">ദൈനംദിന ജീവിതത്തിൽ ഉപയോഗിക്കുന്ന ഇംഗ്ലീഷ് പരിശീലിക്കാം.</p>
+      <div class="practice-menu">
+        <button id="conversationBtn" class="practice-choice">💬<span><strong>Everyday conversations</strong><small>At home, shops and the clinic</small></span></button>
+        <button id="revisionBtn" class="practice-choice">🔁<span><strong>Revise phrases</strong><small>Practise sentences again</small></span></button>
+        <button id="quizBtn" class="practice-choice">🧩<span><strong>Quick quiz</strong><small>Check what you remember</small></span></button>
+        <button id="voiceSettingsBtn" class="practice-choice">🔊<span><strong>Voice settings</strong><small>Test audio and choose speed</small></span></button>
+      </div>
+      <div id="practiceArea"></div>
+    </section>
   </section>
 
-  <section class="panel">
-    <h2>Your progress</h2>
-    <div class="stats-grid">
-      <div class="stat"><strong id="lessonsCount">0</strong><span>Lessons done</span></div>
-      <div class="stat"><strong id="phrasesCount">0</strong><span>Phrases practised</span></div>
-      <div class="stat"><strong id="weeklyCount">0/5</strong><span>This week's goal</span></div>
-    </div>
-    <div id="streakCalendar" class="streak-calendar"></div>
-    <h3>Achievements</h3>
-    <p class="muted small">Small steps count. Badges are encouragement, not grades.</p>
-    <div id="achievementList" class="achievement-grid"></div>
-    <h3>Your weekly practice</h3>
-    <div class="course-progress"><div id="weeklyBar"></div></div>
-    <p id="weeklySummary" class="muted small"></p>
-    <h3>Course checklist</h3>
-    <div id="progressList"></div>
-    <button id="exportProgress" class="secondary full">Export family progress (JSON)</button>
-    <button id="resetProgress" class="danger full">Reset this learner's progress</button>
-    <p class="muted small">Progress is stored in this browser on this device. Export it if you want a backup. It does not automatically sync between phones.</p>
+  <section class="page" id="progressPage" aria-labelledby="progressHeading">
+    <section class="panel">
+      <p class="eyebrow">EVERY SMALL STEP COUNTS</p>
+      <h1 id="progressHeading">My progress ⭐</h1>
+      <p lang="ml">ചെറിയ മുന്നേറ്റങ്ങളും പ്രധാനമാണ്!</p>
+      <div class="stats-grid">
+        <div class="stat"><strong id="lessonsCount">0</strong><span>Lessons done</span></div>
+        <div class="stat"><strong id="phrasesCount">0</strong><span>Phrases practised</span></div>
+        <div class="stat"><strong id="weeklyCount">0/5</strong><span>Practice days this week</span></div>
+      </div>
+      <div class="streak-calendar" id="streakCalendar"></div>
+      <h2>Achievements</h2>
+      <p class="muted small">Badges are encouragement, not grades.</p>
+      <div id="achievementList" class="achievement-grid"></div>
+      <h2>Your weekly practice</h2>
+      <div class="course-progress"><div id="weeklyBar"></div></div>
+      <p id="weeklySummary" class="muted small"></p>
+      <h2>Course checklist</h2>
+      <div id="progressList"></div>
+      <button id="resetProgress" class="danger full">Reset this learner's progress</button>
+      <p class="muted small">Your progress stays on this device and in this browser. It does not automatically sync between phones.</p>
+    </section>
   </section>
 </main>
-
 <footer>
   <p>Made with ❤️ for our family</p>
   <p class="muted small">Free lessons · No account required · Learn at your own pace</p>
