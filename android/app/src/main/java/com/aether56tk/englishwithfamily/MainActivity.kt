@@ -1,13 +1,12 @@
 package com.aether56tk.englishwithfamily
 
 import android.app.Activity
+import android.os.Build
 import android.os.Bundle
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
-import android.view.View
-import android.view.WindowManager
 import android.graphics.Color
 
 class MainActivity : Activity() {
@@ -18,16 +17,28 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         window.statusBarColor = Color.rgb(22, 78, 99)
         window.navigationBarColor = Color.rgb(22, 78, 99)
+
         webView = WebView(this)
         webView.setBackgroundColor(Color.rgb(243, 248, 247))
         webView.webViewClient = WebViewClient()
         webView.webChromeClient = WebChromeClient()
-        webView.settings.javaScriptEnabled = true
-        webView.settings.domStorageEnabled = true
-        webView.settings.cacheMode = WebSettings.LOAD_DEFAULT
-        webView.settings.allowFileAccess = true
-        webView.settings.allowContentAccess = true
-        webView.settings.mediaPlaybackRequiresUserGesture = true
+
+        webView.settings.apply {
+            javaScriptEnabled = true
+            domStorageEnabled = true
+            cacheMode = WebSettings.LOAD_DEFAULT
+            // Required for bundled local assets, while blocking cross-file access.
+            allowFileAccess = true
+            allowContentAccess = false
+            allowFileAccessFromFileURLs = false
+            allowUniversalAccessFromFileURLs = false
+            mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
+            mediaPlaybackRequiresUserGesture = true
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                safeBrowsingEnabled = true
+            }
+        }
+
         webView.isVerticalScrollBarEnabled = true
         setContentView(webView)
         if (savedInstanceState == null) {
