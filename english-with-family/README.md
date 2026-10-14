@@ -10,7 +10,7 @@ A free, beginner-friendly English practice app with Malayalam meanings.
 - Quiz and revision practice
 - Daily streaks, last-seven-day activity calendar, weekly goal and achievement badges
 - Multiple local learner profiles (up to eight)
-- Progress export as JSON
+- Local progress stored in the browser (no cloud sync)
 - Installable web app manifest and app-shell caching for supported browsers
 
 ## Publish with GitHub Pages
@@ -22,6 +22,11 @@ A free, beginner-friendly English practice app with Malayalam meanings.
 
 ## Run locally
 From the `english-with-family` directory, run `python -m http.server 8000`, then open `http://localhost:8000`. Install and service-worker features generally require localhost or HTTPS.
+
+## Privacy, terms and ownership
+- Read `privacy.html` and `terms.html` before using the app.
+- No root `LICENSE` file is provided, so do not assume this repository is open-source or that third-party assets/content may be reused. Confirm ownership and permissions before distributing or commercializing it.
+- The privacy and terms pages are starter notices, not legal advice or a guarantee of compliance. Obtain qualified legal review before commercial launch, collecting personal data, or targeting children.
 
 ## Important limitations
 - The level check is a simple knowledge check, not a full assessment of speaking, listening, or pronunciation.
