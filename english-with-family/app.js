@@ -129,7 +129,7 @@ $("profileSelect").onchange=e=>{active=e.target.value;save();home()};
 $("addProfileBtn").onclick=()=>{if(Object.keys(db.profiles).length>=8){alert("Up to 8 local profiles are supported.");return}const name=prompt("Learner name / പഠിതാവിന്റെ പേര്");if(!name||!name.trim())return;const id="user-"+Date.now();db.profiles[id]=blank();db.profiles[id].name=name.trim();active=id;save();home()};
 $("continueBtn").onclick=()=>openLesson(current());$("lessonBtn").onclick=()=>openLesson(current());$("levelCheckBtn").onclick=()=>{showPage("levelPage");levelCheck()};$("conversationBtn").onclick=conversations;$("revisionBtn").onclick=revision;$("quizBtn").onclick=quiz;$("voiceSettingsBtn").onclick=voices;
 
-$("resetProgress").onclick=()=>{if(confirm("Reset this learner's progress on this device? Export a backup first if needed.")){const n=p().name;db.profiles[active]=blank();db.profiles[active].name=n;save();home();$("activityArea").innerHTML=""}};
+$("resetProgress").onclick=()=>{if(confirm("Reset this learner's progress on this device? This cannot be undone.")){const n=p().name;db.profiles[active]=blank();db.profiles[active].name=n;save();home();$("activityArea").innerHTML=""}};
 document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
 document.querySelectorAll("[data-goto]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.goto)));
 document.addEventListener("click",e=>{const b=e.target.closest("[data-lesson]");if(b)openLesson(lessons.find(l=>l.id===Number(b.dataset.lesson))||current())});
