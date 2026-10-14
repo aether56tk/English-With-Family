@@ -1,4 +1,4 @@
-name: Build Android testing APK
+name: Build Android testing and optional signed release APK
 
 on:
   workflow_dispatch:
@@ -11,12 +11,12 @@ on:
       - "english-with-family/**"
       - ".github/workflows/build-android-apk.yml"
 
-# This workflow only builds and uploads a testing artifact; it does not publish releases.
 permissions:
   contents: read
 
 jobs:
-  build:
+  build-testing:
+    name: Build debug testing APK
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -41,12 +41,61 @@ jobs:
           rm -f android/app/src/main/assets/www/sw.js
       - name: Build debug APK
         run: gradle --no-daemon -p android :app:assembleDebug
-      - name: Rename APK for testing
-        run: cp android/app/build/outputs/apk/debug/app-debug.apk English-With-Family-debug-testing.apk
-      - name: Upload APK testing artifact
+      - name: Upload testing APK
         uses: actions/upload-artifact@v4
         with:
           name: English-With-Family-debug-testing-apk
-          path: English-With-Family-debug-testing.apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+
+  build-signed-release:
+    name: Build signed release APK when signing secrets are configured
+    runs-on: ubuntu-latest
+    if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' && secrets.ANDROID_KEYSTORE_PASSWORD != '' && secrets.ANDROID_KEY_ALIAS != '' && secrets.ANDROID_KEY_PASSWORD != '' }}
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+      - name: Prepare app web assets
+        run: |
+          mkdir -p android/app/src/main/assets/www
+          cp -R english-with-family/. android/app/src/main/assets/www/
+          rm -f android/app/src/main/assets/www/sw.js
+      - name: Prepare signing key
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/english-with-family-release.jks"
+          chmod 600 "$RUNNER_TEMP/english-with-family-release.jks"
+      - name: Build signed release APK
+        env:
+          ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/english-with-family-release.jks
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: gradle --no-daemon -p android :app:assembleRelease
+      - name: Verify APK signature
+        run: |
+          APK="android/app/build/outputs/apk/release/app-release.apk"
+          apksigner verify --verbose "$APK"
+          apksigner verify --print-certs "$APK"
+      - name: Upload signed release candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: English-With-Family-signed-release-candidate
+          path: android/app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
           retention-days: 14
