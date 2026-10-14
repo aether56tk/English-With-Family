@@ -4,9 +4,9 @@ A free, beginner-friendly English practice app with Malayalam meanings.
 
 ## Features
 - Friendly eight-question placement check with a suggested starting level
-- Step-by-step everyday lessons with English phrases and Malayalam meanings
+- 20 themed lessons with English phrases and Malayalam meanings (100 everyday phrases)
 - Browser text-to-speech, including a test button for “Good morning!”
-- Conversation practice for home, shopping, meeting people and clinic visits
+- Conversation practice for home, shopping, meeting people and clinic visits; 20 lesson topics cover family, routines, food, school, phone calls, weather, restaurants, travel, work, plans, health and polite requests
 - Quiz and revision practice
 - Daily streaks, last-seven-day activity calendar, weekly goal and achievement badges
 - Multiple local learner profiles (up to eight)
