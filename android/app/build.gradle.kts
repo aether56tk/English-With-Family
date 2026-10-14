@@ -5,6 +5,10 @@ plugins {
 android {
     namespace = "com.aether56tk.englishwithfamily"
     compileSdk = 35
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
     defaultConfig {
         applicationId = "com.aether56tk.englishwithfamily"
         minSdk = 23
@@ -12,4 +16,8 @@ android {
         versionCode = 1
         versionName = "1.0.0"
     }
+}
+
+kotlin {
+    jvmToolchain(17)
 }
