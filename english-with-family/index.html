@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#164e63">
+  <meta name="description" content="Free beginner English lessons with Malayalam explanations for the whole family.">
+  <title>English With Family</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">🌿 English With Family</div>
+  <p lang="ml">ഇംഗ്ലീഷ് നമുക്ക് ഒരുമിച്ച് പഠിക്കാം!</p>
+  <div class="header-row">
+    <label class="profile-label" for="profileSelect">Learner / പഠിതാവ്</label>
+    <select id="profileSelect" aria-label="Choose learner"></select>
+    <button id="addProfileBtn" class="small-btn light">+ Add</button>
+  </div>
+</header>
+
+<main>
+  <section class="panel welcome">
+    <p class="eyebrow">YOUR DAILY PRACTICE · ദിവസവും പരിശീലിക്കാം</p>
+    <h1 id="welcomeTitle">നമസ്കാരം! 👋</h1>
+    <p lang="ml">ഇന്ന് നമുക്ക് കുറച്ച് ഇംഗ്ലീഷ് പഠിക്കാം.</p>
+    <p class="muted">Short lessons. Gentle practice. No subscription.</p>
+    <div class="welcome-row">
+      <div><strong id="streakNumber">0</strong><span>day streak</span></div>
+      <div><strong id="completedNumber">0/30</strong><span>days completed</span></div>
+    </div>
+    <button id="continueBtn" class="primary full">Start learning</button>
+  </section>
+
+  <section class="panel">
+    <h2>Start with your level</h2>
+    <p class="muted">A few friendly questions help us suggest a starting point.</p>
+    <button id="levelCheckBtn" class="secondary full">Take the level check</button>
+    <div id="levelCheckArea"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Today’s lesson</h2>
+    <div id="todayLesson"></div>
+    <button id="lessonBtn" class="primary full">Open today's lesson</button>
+  </section>
+
+  <section class="panel">
+    <h2>Practice</h2>
+    <div class="action-grid">
+      <button id="conversationBtn" class="tile">💬<span>Conversation practice</span></button>
+      <button id="revisionBtn" class="tile">🔁<span>Revision</span></button>
+      <button id="quizBtn" class="tile">🧩<span>Quick quiz</span></button>
+      <button id="voiceSettingsBtn" class="tile">🔊<span>Voice settings</span></button>
+    </div>
+    <div id="activityArea"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Your progress</h2>
+    <div class="stats-grid">
+      <div class="stat"><strong id="lessonsCount">0</strong><span>Lessons done</span></div>
+      <div class="stat"><strong id="phrasesCount">0</strong><span>Phrases practised</span></div>
+      <div class="stat"><strong id="weeklyCount">0/5</strong><span>This week's goal</span></div>
+    </div>
+    <div id="streakCalendar" class="streak-calendar"></div>
+    <h3>Achievements</h3>
+    <p class="muted small">Small steps count. Badges are encouragement, not grades.</p>
+    <div id="achievementList" class="achievement-grid"></div>
+    <h3>Your weekly practice</h3>
+    <div class="course-progress"><div id="weeklyBar"></div></div>
+    <p id="weeklySummary" class="muted small"></p>
+    <h3>Course checklist</h3>
+    <div id="progressList"></div>
+    <button id="exportProgress" class="secondary full">Export family progress (JSON)</button>
+    <button id="resetProgress" class="danger full">Reset this learner's progress</button>
+    <p class="muted small">Progress is stored in this browser on this device. Export it if you want a backup. It does not automatically sync between phones.</p>
+  </section>
+</main>
+
+<footer>
+  <p>Made with ❤️ for our family</p>
+  <p class="muted small">Free lessons · No account required · Learn at your own pace</p>
+</footer>
+<script src="./app.js"></script>
+<script>if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) { window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {})); }</script>
+</body>
+</html>
