@@ -1,0 +1,13 @@
+{
+  "id": "./",
+  "name": "English With Family",
+  "short_name": "Family English",
+  "description": "Free beginner English lessons with Malayalam explanations for families",
+  "lang": "en-IN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f3f8f7",
+  "theme_color": "#164e63"
+}
