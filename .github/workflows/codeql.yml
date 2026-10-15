@@ -1,0 +1,50 @@
+name: CodeQL Security Analysis
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "23 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  analyze:
+    name: Analyze Android/Kotlin and JavaScript
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+      - name: Prepare bundled web assets
+        run: |
+          mkdir -p android/app/src/main/assets/www
+          cp -R english-with-family/. android/app/src/main/assets/www/
+          rm -f android/app/src/main/assets/www/sw.js
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript, java-kotlin
+      - name: Build Android project for analysis
+        run: gradle --no-daemon -p android :app:assembleDebug
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3

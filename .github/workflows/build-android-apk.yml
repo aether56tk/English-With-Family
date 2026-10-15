@@ -1,72 +1,123 @@
-name: Build and publish Android APK
+name: Build Android testing and optional signed release APK
 
 on:
   workflow_dispatch:
   push:
     branches:
       - main
+      - security/hardening-before-sale
     paths:
       - "android/**"
       - "english-with-family/**"
       - ".github/workflows/build-android-apk.yml"
-    tags:
-      - "v1.*"
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  build:
+  build-testing:
+    name: Build debug testing APK
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Set up Java
         uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "17"
-
       - name: Set up Android SDK
         uses: android-actions/setup-android@v4
-
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.9"
-
       - name: Prepare app web assets
         run: |
           mkdir -p android/app/src/main/assets/www
           cp -R english-with-family/. android/app/src/main/assets/www/
           rm -f android/app/src/main/assets/www/sw.js
-
       - name: Build debug APK
         run: gradle --no-daemon -p android :app:assembleDebug
-
-      - name: Rename APK for release
-        run: cp android/app/build/outputs/apk/debug/app-debug.apk English-With-Family-${GITHUB_REF_NAME}-debug.apk
-
-      - name: Upload APK build artifact
+      - name: Upload testing APK
         uses: actions/upload-artifact@v4
         with:
-          name: English-With-Family-${{ github.ref_name }}-debug-apk
-          path: English-With-Family-${{ github.ref_name }}-debug.apk
+          name: English-With-Family-debug-testing-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
-          retention-days: 30
+          retention-days: 14
 
-      - name: Publish GitHub release with APK
-        if: startsWith(github.ref, 'refs/tags/v1.')
-        uses: softprops/action-gh-release@v2
+  build-signed-release:
+    name: Build signed release APK when signing secrets are configured
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check signing secrets
+        id: signing
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ] && [ -n "$KEYSTORE_PASSWORD" ] && [ -n "$KEY_ALIAS" ] && [ -n "$KEY_PASSWORD" ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "Release signing secrets are not configured; skipping release build."
+          fi
+      - name: Checkout repository
+        if: steps.signing.outputs.configured == 'true'
+        uses: actions/checkout@v4
+      - name: Set up Java
+        if: steps.signing.outputs.configured == 'true'
+        uses: actions/setup-java@v5
         with:
-          name: English With Family ${{ github.ref_name }}
-          tag_name: ${{ github.ref_name }}
-          generate_release_notes: true
-          files: English-With-Family-${{ github.ref_name }}-debug.apk
-          body: |
-            English With Family Android APK release.
-
-            - Includes the English With Family web lessons packaged in an Android app.
-            - This is a debug-signed APK for testing, not a Play Store production release.
-            - Speech recognition availability depends on the Android device and WebView.
+          distribution: temurin
+          java-version: "17"
+      - name: Set up Android SDK
+        if: steps.signing.outputs.configured == 'true'
+        uses: android-actions/setup-android@v4
+      - name: Set up Gradle
+        if: steps.signing.outputs.configured == 'true'
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+      - name: Prepare app web assets
+        if: steps.signing.outputs.configured == 'true'
+        run: |
+          mkdir -p android/app/src/main/assets/www
+          cp -R english-with-family/. android/app/src/main/assets/www/
+          rm -f android/app/src/main/assets/www/sw.js
+      - name: Prepare signing key
+        if: steps.signing.outputs.configured == 'true'
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/english-with-family-release.jks"
+          chmod 600 "$RUNNER_TEMP/english-with-family-release.jks"
+      - name: Build signed release APK
+        if: steps.signing.outputs.configured == 'true'
+        env:
+          ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/english-with-family-release.jks
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: gradle --no-daemon -p android :app:assembleRelease
+      - name: Verify APK signature
+        if: steps.signing.outputs.configured == 'true'
+        run: |
+          APK="android/app/build/outputs/apk/release/app-release.apk"
+          apksigner verify --verbose "$APK"
+          apksigner verify --print-certs "$APK"
+      - name: Upload signed release candidate
+        if: steps.signing.outputs.configured == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: English-With-Family-signed-release-candidate
+          path: android/app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: error
+          retention-days: 14

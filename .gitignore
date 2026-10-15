@@ -1,0 +1,15 @@
+# Private Android signing material - never commit
+*.jks
+*.keystore
+*.p12
+*.pfx
+
+# Local Android SDK configuration
+local.properties
+android/local.properties
+
+# Android build outputs and caches
+android/.gradle/
+android/**/build/
+*.apk
+*.aab
